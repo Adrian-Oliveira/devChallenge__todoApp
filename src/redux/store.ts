@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 import todosReducer from './todos/todosSlice'
+import toggleReducer from './toggle/toggleSlice'
 
 const store = configureStore({
     reducer: {
         todos:todosReducer,
+        toggle:toggleReducer,
     },
 })
 
