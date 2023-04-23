@@ -3,24 +3,47 @@
     flex-direction: column;
     gap: 2.7rem;
 
+    &__singleTodo{
+        display: flex;
+        flex-direction: row;
+        position: relative;
+        align-items: center;
+    }
 
-    input{
-        width: 27px;
-        height: 27px;
+    &__checkbox{
+        display: inline-block;
+        width: 2.7rem;
+        height: 2.7rem;
         border: 1px solid #828282;
         border-radius: 4px;
+        i{
+            color: #FFF;
+        }
     }
-    input:checked{
-        width: 27px;
-        height: 27px;
+
+    &__checkbox--checked{
+        display: inline-block;
+        width: 2.7rem;
+        height: 2.7rem;
+
         background: #2F80ED;
         color: #FFF;
 
         border: 1px solid #2F80ED;
         border-radius: 4px;
+        i{
+            color: #FFF;
+        }
     }
 
+
+
     &__todo{
+        margin-left: .7rem;
+        padding-right: 1.3rem;
+        height: fit-content;
+        max-width: 55.5rem;
+        word-wrap: break-word;        
         &--complete{
 
             font-weight: 500;
@@ -38,5 +61,12 @@
             font-size: 18px;
             line-height: 22px;
         }
+    }
+
+    &__singleTodo__deleteTodo{
+        position: absolute;
+        right: 0rem;
+        color: #BDBDBD;
+        cursor: pointer;
     }
 }

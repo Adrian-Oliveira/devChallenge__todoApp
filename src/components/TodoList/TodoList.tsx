@@ -1,4 +1,4 @@
-import { ChangeEvent, ChangeEventHandler, useEffect, useState} from 'react';
+import React from 'react';
 
 import './todoListComponent.scss';
 
@@ -6,7 +6,7 @@ import type { TodoState } from '../../redux/todos/todosSlice';
 import Todo from '../Todo';
 import { useAppDispatch,useAppSelector } from '../../actions/hooks';
 
-import { todoMarkAsComplete, todoMarkAsIncomplete } from '../../redux/todos/todosSlice';
+import { todoMarkAsComplete, todoMarkAsIncomplete, delTodo } from '../../redux/todos/todosSlice';
 
 const TodoList = ()=> {
 
@@ -15,7 +15,6 @@ const TodoList = ()=> {
     const todosIds = useAppSelector((state)=>state.todos.idList);
     const toggle = useAppSelector((state)=>state.toggle.toggle);
     
-    const [todosToRender, setTodosToRender] = useState<TodoState[]>([]);
 
     const handleChange = (target:HTMLInputElement, id:number)=>{
         console.log(target.checked);
@@ -27,23 +26,12 @@ const TodoList = ()=> {
         }
     }
 
-    useEffect(()=>{
-        if(toggle==="all"){
-            setTodosToRender(todos)
-        }
-        else if(toggle==="active"){
-            setTodosToRender(todos.filter((todo)=>!todo.complete))
-        }
-        else{
-            setTodosToRender(todos.filter((todo)=>todo.complete))
-        }
-    },[toggle])
-
-    const filterTodoWithToggle = (toggle)=>{}
 
     return (
         <div className='todoListComponent'>
-            {todos.filter((todo)=>{
+            {todosIds
+            .map((id)=>todos[id])
+            .filter((todo)=>{
                 if(toggle==="all"){
                     return true
                 }
@@ -53,18 +41,35 @@ const TodoList = ()=> {
                 else{
                     return todo.complete
                 }
-            }).map((todo,index)=>{
+            })
+            .map((todo,index)=>{
                 return(
-                    <div key={index}>
-                        <input type="checkbox" 
-                               onChange={(e)=>handleChange(e.target, todo.id)} 
-                               checked={todo.complete}/>
+                    <div key={index} className='todoListComponent__singleTodo'>
+                        <label className={todo.complete?
+                                'todoListComponent__checkbox--checked':
+                                'todoListComponent__checkbox'}>
+                            <i className="material-symbols-outlined">
+                                check
+                            </i>
+                            <input type="checkbox" 
+                                onChange={(e)=>handleChange(e.target, todo.id)} 
+                                checked={todo.complete}/>
+                            
+                        </label>
 
-                        <span className={todo.complete?
+                        <span className={`todoListComponent__todo 
+                                        ${todo.complete?
                                         "todoListComponent__todo--complete":
-                                        "todoListComponent__todo--incomplete"}>
+                                        "todoListComponent__todo--incomplete"}`}>
                             {todo.todoMessage}
                         </span>
+                        {toggle==='complete'?
+                            <span 
+                                onClick={()=>dispatch(delTodo(todo.id))}
+                                className="todoListComponent__singleTodo__deleteTodo material-symbols-outlined">
+                                delete
+                            </span>
+                        :null}
                     </div>
                 );
             })}
