@@ -18,7 +18,7 @@ const TodoList = ()=> {
     const handleChange = (target:HTMLInputElement, id:number)=>{
         if(target.checked){
             dispatch(todoMarkAsComplete(id))
-        }
+        }   
         else{
             dispatch(todoMarkAsIncomplete(id))
         }

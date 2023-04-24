@@ -16,6 +16,14 @@ const initialState:TodosState = {
   idList:[],
   todosList: [],
 }
+const savedStateString = localStorage.getItem('savedState');
+
+if(savedStateString){
+  const savedState = JSON.parse(savedStateString);
+  initialState.idList = savedState.idList;
+  initialState.todosList = savedState.todosList;
+}
+
 
 export const todosSlice = createSlice({
   name: 'todos',
@@ -40,11 +48,23 @@ export const todosSlice = createSlice({
     },
     todoMarkAsIncomplete:(state, action: PayloadAction<number>)=>{
       state.todosList[action.payload].complete = false
+    },
+    setIds:(state, action: PayloadAction<number[]>)=>{
+      state.idList = action.payload
+    },
+    setTodos:(state, action: PayloadAction<TodoState[]>)=>{
+      state.todosList = action.payload
+    },
+    saveTodosInTheLocalStorage:(state)=>{
+      const [todosList, idList] = [state.todosList, state.idList];
+      localStorage.setItem('savedState', JSON.stringify({todosList, idList}));
     }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const {addTodo,delTodo, todoMarkAsComplete, todoMarkAsIncomplete, delAllTodosCompleted } = todosSlice.actions
+export const {addTodo,delTodo, todoMarkAsComplete,
+             todoMarkAsIncomplete, delAllTodosCompleted,
+             setIds, setTodos,saveTodosInTheLocalStorage } = todosSlice.actions
 
 export default todosSlice.reducer;

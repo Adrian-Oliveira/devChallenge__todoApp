@@ -1,25 +1,29 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.scss'
 import { useAppSelector, useAppDispatch } from './actions/hooks';
 import { changeToggle } from './redux/toggle/toggleSlice';
-import { addTodo } from './redux/todos/todosSlice';
-import Todo from './components/Todo';
+import { addTodo, saveTodosInTheLocalStorage } from './redux/todos/todosSlice';
 import TodoList from './components/TodoList';
 
 function App() {
   const [text, setText] = useState('');
 
   const dispatch = useAppDispatch();
+  const toggle = useAppSelector((state)=>state.toggle.toggle)
   const todos = useAppSelector((state)=>state.todos.todosList);
   const ids = useAppSelector((state)=>state.todos.idList);
-  const toggle = useAppSelector((state)=>state.toggle.toggle)
-
+  
   const handleAddClick = ()=>{
     if(text!==''){
       dispatch(addTodo(text))
       setText('')
     }
   }
+
+  useEffect(()=>{
+    dispatch(saveTodosInTheLocalStorage());
+  },[todos,ids]);
+
 
   return (
     <>
