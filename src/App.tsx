@@ -15,8 +15,10 @@ function App() {
   const toggle = useAppSelector((state)=>state.toggle.toggle)
 
   const handleAddClick = ()=>{
-    dispatch(addTodo(text))
-    setText('')
+    if(text!==''){
+      dispatch(addTodo(text))
+      setText('')
+    }
   }
 
   return (

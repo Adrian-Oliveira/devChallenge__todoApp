@@ -69,4 +69,27 @@
         color: #BDBDBD;
         cursor: pointer;
     }
+
+    &__buttonDeleteAll{
+        align-self: flex-end;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0 0 0 2.8rem;
+        width: 12.4rem;
+        height: 4rem;
+    
+        background: #EB5757;
+        border-radius: 4px;
+
+        font-weight: 600;
+        font-size: 12px;
+        line-height: 15px;
+
+        color: #FFFFFF;
+
+        i{
+            font-size: 12px;
+        }
+    }
 }

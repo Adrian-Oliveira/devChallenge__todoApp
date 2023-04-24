@@ -1,12 +1,10 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 
 import './todoListComponent.scss';
 
-import type { TodoState } from '../../redux/todos/todosSlice';
-import Todo from '../Todo';
 import { useAppDispatch,useAppSelector } from '../../actions/hooks';
 
-import { todoMarkAsComplete, todoMarkAsIncomplete, delTodo } from '../../redux/todos/todosSlice';
+import { todoMarkAsComplete, todoMarkAsIncomplete, delTodo, delAllTodosCompleted } from '../../redux/todos/todosSlice';
 
 const TodoList = ()=> {
 
@@ -15,9 +13,9 @@ const TodoList = ()=> {
     const todosIds = useAppSelector((state)=>state.todos.idList);
     const toggle = useAppSelector((state)=>state.toggle.toggle);
     
+    const [currentIds, setCurrentIds]=useState<number[]>([]);
 
     const handleChange = (target:HTMLInputElement, id:number)=>{
-        console.log(target.checked);
         if(target.checked){
             dispatch(todoMarkAsComplete(id))
         }
@@ -25,6 +23,23 @@ const TodoList = ()=> {
             dispatch(todoMarkAsIncomplete(id))
         }
     }
+
+    useEffect(()=>{
+        const filteredTodosIds = todosIds
+                                .filter((id)=>{
+                                    if(toggle==="all"){
+                                        return true
+                                    }
+                                    else if(toggle==="active"){
+                                        return !todos[id].complete
+                                    }
+                                    else{
+                                        return todos[id].complete
+                                    }
+                                })
+        setCurrentIds(filteredTodosIds)
+
+    },[toggle])
 
 
     return (
@@ -64,15 +79,27 @@ const TodoList = ()=> {
                             {todo.todoMessage}
                         </span>
                         {toggle==='complete'?
-                            <span 
+                            <i
                                 onClick={()=>dispatch(delTodo(todo.id))}
                                 className="todoListComponent__singleTodo__deleteTodo material-symbols-outlined">
                                 delete
-                            </span>
+                            </i>
                         :null}
                     </div>
                 );
             })}
+
+            {toggle==='complete'?
+                <button 
+                    onClick={()=>{dispatch(delAllTodosCompleted(currentIds))}}
+                    className="todoListComponent__buttonDeleteAll">
+                    <i
+                        className="material-symbols-outlined">
+                        delete
+                    </i>
+                    delete all
+                </button>
+            :null}
         </div>
     )
 }

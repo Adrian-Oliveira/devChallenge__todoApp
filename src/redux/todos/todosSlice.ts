@@ -22,12 +22,18 @@ export const todosSlice = createSlice({
   initialState,
   reducers: {
     addTodo: (state, action: PayloadAction<string>) => {
-      state.idList.push(state.todosList.length)
+      state.idList.unshift(state.todosList.length)
       state.todosList.push({id: state.todosList.length,complete: false, todoMessage:action.payload})
     },
     delTodo: (state, action: PayloadAction<number>) => {
       const index = state.idList.indexOf(action.payload)
       state.idList.splice(index, 1)
+    },
+    delAllTodosCompleted: (state, action: PayloadAction<number[]>) => {
+     
+      state.idList = state.idList.filter((id)=>{
+        return action.payload.indexOf(id)<0;
+      })
     },
     todoMarkAsComplete:(state, action: PayloadAction<number>)=>{
       state.todosList[action.payload].complete = true
@@ -39,6 +45,6 @@ export const todosSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const {addTodo,delTodo, todoMarkAsComplete,todoMarkAsIncomplete } = todosSlice.actions
+export const {addTodo,delTodo, todoMarkAsComplete, todoMarkAsIncomplete, delAllTodosCompleted } = todosSlice.actions
 
 export default todosSlice.reducer;
