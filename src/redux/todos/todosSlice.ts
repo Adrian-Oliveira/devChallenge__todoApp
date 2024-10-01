@@ -21,7 +21,7 @@ const savedStateString = localStorage.getItem('savedState');
 if(savedStateString){
   const savedState = JSON.parse(savedStateString);
   initialState.idList = savedState.idList;
-  initialState.todosList = savedState.todosList;
+  initialState.todosList = savedState.todosList
 }
 
 
@@ -36,10 +36,13 @@ export const todosSlice = createSlice({
     delTodo: (state, action: PayloadAction<number>) => {
       const index = state.idList.indexOf(action.payload)
       state.idList.splice(index, 1)
+
     },
     delAllTodosCompleted: (state, action: PayloadAction<number[]>) => {
      
+
       state.idList = state.idList.filter((id)=>{
+
         return action.payload.indexOf(id)<0;
       })
     },
